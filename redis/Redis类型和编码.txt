@@ -1,0 +1,31 @@
+类型              编码                          对象      
+OBJ_STRING      OBJ_ENCODING_RAW          动态字符串对象             /* Raw representation 简单动态字符串sds*/
+OBJ_STRING      OBJ_ENCODING_INT          整数值类型的字符串         /* Encoded as integer 整数*/
+OBJ_STRING      OBJ_ENCODING_EMBSTR       只读短字符串对象          /* Embedded sds string encoding  */
+
+OBJ_LIST        OBJ_ENCODING_QUICKLIST   快速列表实现的列表对象      /* Encoded as linked list of ziplists  由双端链表和压缩列表构成的高速列表 */
+
+OBJ_HASH        OBJ_ENCODING_ZIPLIST     压缩表实现的哈希对象        /* Encoded as ziplist 压缩列表 */
+OBJ_HASH        OBJ_ENCODING_HT          字典实现的哈希对象          /* Encoded as hash table  字典dict*/
+
+OBJ_SET         OBJ_ENCODING_INTSET      整数集合实现的集合对象       /* Encoded as intset 整数集合   */
+OBJ_SET         OBJ_ENCODING_HT          字典实现的集合对象         
+
+OBJ_ZSET        OBJ_ENCODING_SKIPLIST    跳跃表实现的有序集合对象    /* Encoded as skiplist  跳表*/
+OBJ_ZSET        OBJ_ENCODING_ZIPLIST     压缩表实现的有序集合对象   
+
+OBJ_STREAM      OBJ_ENCODING_STREAM      流对象                    /* Encoded as a radix tree of listpacks */
+
+
+对于不同场景, 对类型配置合适的编码, 达到最好的性能状态
+
+比如在存储小数据的时候,可以采用压缩表编码, 已达到节省内存的目的
+如果在数据较大的时候,可以采用字典实现的哈希对象, 因为解压缩对大数据来会比较耗时, 效率优先, 采用字典编码
+
+
+
+
+                    一般情况                少量数据                            特殊情况
+String                 RAW                 EMBSTR(39个字符以内)             INT
+List                QUICKLIST  
+Set                   HT
